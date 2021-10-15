@@ -1,0 +1,1 @@
+scrapy runspider [nombre del archivo].py -o [nombre del archivo resultante].csv -t [formato del archivo]
