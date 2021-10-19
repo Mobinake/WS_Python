@@ -7,16 +7,16 @@ year = input("Ingrese el año de la cotizacion: ")
 month = input("Ingrese el mes de la cotizacion: ")
 
 #url por defenco
-url = 'https://www.set.gov.py/portal/PARAGUAY-SET/InformesPeriodicos?folder-id=repository:collaboration:/sites/PARAGUAY-SET/categories/SET/Informes%20Periodicos/cotizaciones-historicos'
+url = 'https://www.set.gov.py/portal/PARAGUAY-SET/detail?folder-id=repository:collaboration:/sites/PARAGUAY-SET/categories/SET/Informes%20Periodicos/cotizaciones-historicos/2010&content-id=/repository/collaboration/sites/PARAGUAY-SET/documents/informes-periodicos/cotizaciones/2010/a-mes-de-enero'
 
 
-while( url != 'https://www.set.gov.py/portal/PARAGUAY-SET/InformesPeriodicos?folder-id=repository:collaboration:/sites/PARAGUAY-SET/categories/SET/Informes%20Periodicos/cotizaciones-historicos' ):
+while( (year > "2010") and (year < "2021")  ):
     if year == 2010:
         if month.lower() == "enero":
             url = 'https://www.set.gov.py/portal/PARAGUAY-SET/detail?folder-id=repository:collaboration:/sites/PARAGUAY-SET/categories/SET/Informes%20Periodicos/cotizaciones-historicos/2010&content-id=/repository/collaboration/sites/PARAGUAY-SET/documents/informes-periodicos/cotizaciones/2010/a-mes-de-enero'
         elif month.lower() == "febrero":
             url = 'https://www.set.gov.py/portal/PARAGUAY-SET/detail?folder-id=repository:collaboration:/sites/PARAGUAY-SET/categories/SET/Informes%20Periodicos/cotizaciones-historicos/2010&content-id=/repository/collaboration/sites/PARAGUAY-SET/documents/informes-periodicos/cotizaciones/2010/b-mes-de-febrero'
-        elif month.lower().lower() == "marzo":
+        elif month.lower() == "marzo":
             url = 'https://www.set.gov.py/portal/PARAGUAY-SET/detail?folder-id=repository:collaboration:/sites/PARAGUAY-SET/categories/SET/Informes%20Periodicos/cotizaciones-historicos/2010&content-id=/repository/collaboration/sites/PARAGUAY-SET/documents/informes-periodicos/cotizaciones/2010/c-mes-de-marzo'
         elif month.lower() == "abril":
             url = 'https://www.set.gov.py/portal/PARAGUAY-SET/detail?folder-id=repository:collaboration:/sites/PARAGUAY-SET/categories/SET/Informes%20Periodicos/cotizaciones-historicos/2010&content-id=/repository/collaboration/sites/PARAGUAY-SET/documents/informes-periodicos/cotizaciones/2010/d-mes-de-abril'
@@ -49,12 +49,13 @@ page = requests.get(url)
 soup = BeautifulSoup(page.text, 'html.parser')
 
 #separar todos los blockquotes en otra variable
-cambioItem = soup.find_all(class_="UIRowContainer")
+cambioItem = soup.find_all(class_='webContentInformation content-display')
 
 #recorremos todos los datos obtenidos
 for cambio in cambioItem:
     #buscamos dentro de la pagina las clases necesarias
-    texto = cambio.find()
+    texto = cambio.find_all('table').text()
+
 
     print([texto])
 
