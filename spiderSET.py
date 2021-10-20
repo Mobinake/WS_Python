@@ -1,5 +1,4 @@
 import requests
-import itertools
 from bs4 import BeautifulSoup
 
 # definimos las variables
