@@ -69,11 +69,13 @@ cambioItem = soup.find_all('table')
 #recorremos todos los datos obtenidos
 for cambio in cambioItem:
     #buscamos dentro de la pagina las clases necesarias
-    moneda = cambio.find("tr").text.replace('\n', ' ').replace('\r', ' ').replace('\t', ' ')
+    #moneda = cambio.find("tr").text.replace('\n', ' ').replace('\r', ' ').replace('\t', ' ')
     precio = cambio.get_text("td", strip=True).replace('td', '-')
-    print(" hola")
-    print(precio)
-    #print([moneda,precio])
+
+    listPrecio = precio.split("-")
+
+    print(listPrecio)
+
 
 
 
