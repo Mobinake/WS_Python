@@ -1,7 +1,7 @@
 import wx
 import wx.grid as grid
 
-#to do debe estar en una clase cuando se trabaja con wx
+#debe estar en una clase cuando se trabaja con wx
 class Buck(wx.Frame):
     #metodo constructor
     def __init__(self, parent, id):
