@@ -3,41 +3,45 @@ from bs4 import BeautifulSoup
 import wx
 import wx.grid as grid
 
-import wxPythontuto1
 
 
 # url por defecto
 url = 'https://www.set.gov.py/portal/PARAGUAY-SET/detail?folder-id=repository:collaboration:/sites/PARAGUAY-SET/categories/SET/Informes%20Periodicos/cotizaciones-historicos/2010&content-id=/repository/collaboration/sites/PARAGUAY-SET/documents/informes-periodicos/cotizaciones/2010/a-mes-de-enero'
 year = 0
 month = 0
-# debe estar en una clase cuando se trabaja con wx
-class Buck(wx.Frame):
 
+# debe estar en una clase cuando se trabaja con wx
+class SpiderInterface(wx.Frame):
     #constructor
     def __init__(self, parent, id):
+        wx.Frame.__init__(self, parent, id, 'Primera ventana', size=(1200, 820))
+        self.InitUI()
+        self.Show(True)
 
-        # configuramos la ventana para poder verla
-        wx.Frame.__init__(self, parent, id, 'Primera ventana', size=(800, 600))
-        # creamos un panel
+    #interfaz
+    def InitUI(self):
+        # panel
         panel = wx.Panel(self)
 
-        #tabla
-        table = grid.Grid(self)
-        table.CreateGrid(33, 12)
 
-        #boxsizer
-        sizer = wx.BoxSizer(wx.VERTICAL)
-        sizer.Add(table, 1, wx.EXPAND)
-        self.SetSizer(sizer)
 
-        #botones
+        # botones
         # creacion de un button salida en la pos                     x   y ,tamaÃ±o  m    n
-        buttonSalir = wx.Button(panel, label="Salida", pos=(10, 160), size=(60, 40))
+        buttonPromedio = wx.Button(panel, label="Promedio de monedas", pos = (10,10), size=(160, 30))
+        buttonMay = wx.Button(panel, label="Mayor precio a menor precio", pos = (10,40), size=(200, 30))
+        buttonMen = wx.Button(panel, label="Menor precio a mayor precio", pos = (10,70), size=(200, 30))
+        buttonSalir = wx.Button(panel, label="Salida", pos = (10,100), size=(60, 30))
         # cada vez que tenga un evento de click al button actual, ejecuta la funcion self.(funcion)
+        self.Bind(wx.EVT_BUTTON, self.promedio, buttonPromedio)
+        self.Bind(wx.EVT_BUTTON, self.may, buttonMay)
+        self.Bind(wx.EVT_BUTTON, self.men, buttonMen)
         self.Bind(wx.EVT_BUTTON, self.closebutton, buttonSalir)
 
-        #barra de estado, inferior
-        status = self.CreateStatusBar()
+
+
+
+        # #barra de estado, inferior
+        # status = self.CreateStatusBar()
 
         #barra de menu, superior
         menubar = wx.MenuBar()
@@ -52,20 +56,23 @@ class Buck(wx.Frame):
         menubar.Append(secmenu, "Creador")
         self.SetMenuBar(menubar)
 
-        #text box
-        boxYear = wx.TextEntryDialog(None, "Ingrese el año", "WebScraping w Python", "Ingrese el año")
-        # preguntamos si selecciono aceptar o cancelar
-        if boxYear.ShowModal() == wx.ID_OK:
-            year = boxYear.GetValue()
-            print(year)
-        boxmonth = wx.TextEntryDialog(None, "Ingrese el mes", "WebScraping w Python", "Ingrese el mes")
-        # preguntamos si selecciono aceptar o cancelar
-        if boxmonth.ShowModal() == wx.ID_OK:
-            month = boxmonth.GetValue()
-            print(month)
-
+        # #text box
+        # boxYear = wx.TextEntryDialog(None, "Ingrese el año", "WebScraping w/Python", "Ingrese el año")
+        # # preguntamos si selecciono aceptar o cancelar
+        # if boxYear.ShowModal() == wx.ID_OK:
+        #     year = boxYear.GetValue()
+        # boxmonth = wx.TextEntryDialog(None, "Ingrese el mes", "WebScraping w/Python", "Ingrese el mes")
+        # # preguntamos si selecciono aceptar o cancelar
+        # if boxmonth.ShowModal() == wx.ID_OK:
+        #     month = boxmonth.GetValue()
 
     # funciones
+    def promedio(self, event):
+        pass
+    def may(self, event):
+        pass
+    def men(self, event):
+        pass
     def closebutton(self, event):
         self.Close(True)
 
@@ -85,12 +92,10 @@ if ((year == 2015) or (year == 2016)):
     aux = 'https://www.set.gov.py/portal/PARAGUAY-SET/detail?folder-id=repository:collaboration:/sites/PARAGUAY-SET/categories/SET/Informes%20Periodicos/cotizaciones-historicos/ano1/a-mes-de-enero&content-id=/repository/collaboration/sites/PARAGUAY-SET/documents/informes-periodicos/cotizaciones/ano1/A_-_Mes_de_mes1'
     aux1 = aux.replace("ano1", year)
     url = aux1.replace("mes1", month)
-    print(url)
 if ((year == 2018) or (year == 2020)):
     aux = 'https://www.set.gov.py/portal/PARAGUAY-SET/detail?folder-id=repository:collaboration:/sites/PARAGUAY-SET/categories/SET/Informes%20Periodicos/cotizaciones-historicos/ano1/a-mes-de-enero&content-id=/repository/collaboration/sites/PARAGUAY-SET/documents/informes-periodicos/cotizaciones/ano1/A%20-%20Mes%20de%20mes1'
     aux1 = aux.replace("ano1", year)
     url = aux1.replace("mes1", month)
-    print(url)
 
 # hacemos la peticion a la pagina de el html
 page = requests.get(url)
@@ -121,8 +126,8 @@ def getCompraVentaDelDia(row):
         yield [row[i-1], row[i]]
 
 #formato en consola
-#       "dolar"    :    "real"   :"Peso argentino"   : "yenes"    :    "euro" :        "libra"
-# {compra : venta}{compra : venta}{compra : venta}{compra : venta}{compra : venta}{compra : venta}
+#       "dolar"    :    "real"
+# {compra : venta}{compra : venta}
 #
 
 def getCompraVentaDelMes(row):
@@ -133,13 +138,11 @@ def getCompraVentaDelMes(row):
         #print( f"dia {x}", next(generadorDelDia), next(generadorDelDia), next(generadorDelDia), next(generadorDelDia), next(generadorDelDia), next(generadorDelDia))
 
 
-
-
 if __name__ == '__main__':
     # app object = corre el programa
     app = wx.App()
-    # frame object = muestra el programa
-    frame = Buck(parent=None, id=-1)
+    #frame object = muestra el programa
+    frame = SpiderInterface(parent=None, id=-1)
     frame.Show()
     app.MainLoop()
 
