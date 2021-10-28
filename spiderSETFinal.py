@@ -10,6 +10,10 @@ url = 'https://www.set.gov.py/portal/PARAGUAY-SET/detail?folder-id=repository:co
 year = 0
 month = 0
 
+# Datos filtrados y estandarisados
+parsed_titles = []
+parsed_valores = []
+
 # debe estar en una clase cuando se trabaja con wx
 class SpiderInterface(wx.Frame):
     #constructor
@@ -28,8 +32,8 @@ class SpiderInterface(wx.Frame):
         # botones
         # creacion de un button salida en la pos                     x   y ,tamaÃ±o  m    n
         buttonPromedio = wx.Button(panel, label="Promedio de monedas", pos = (10,10), size=(160, 30))
-        buttonMay = wx.Button(panel, label="Mayor precio a menor precio", pos = (10,40), size=(200, 30))
-        buttonMen = wx.Button(panel, label="Menor precio a mayor precio", pos = (10,70), size=(200, 30))
+        buttonMay = wx.Button(panel, label="Mayor precio", pos = (10,40), size=(200, 30))
+        buttonMen = wx.Button(panel, label="Menor precio", pos = (10,70), size=(200, 30))
         buttonSalir = wx.Button(panel, label="Salida", pos = (10,100), size=(60, 30))
         # cada vez que tenga un evento de click al button actual, ejecuta la funcion self.(funcion)
         self.Bind(wx.EVT_BUTTON, self.promedio, buttonPromedio)
@@ -56,19 +60,19 @@ class SpiderInterface(wx.Frame):
         menubar.Append(secmenu, "Creador")
         self.SetMenuBar(menubar)
 
-        # #text box
-        # boxYear = wx.TextEntryDialog(None, "Ingrese el año", "WebScraping w/Python", "Ingrese el año")
-        # # preguntamos si selecciono aceptar o cancelar
-        # if boxYear.ShowModal() == wx.ID_OK:
-        #     year = boxYear.GetValue()
-        # boxmonth = wx.TextEntryDialog(None, "Ingrese el mes", "WebScraping w/Python", "Ingrese el mes")
-        # # preguntamos si selecciono aceptar o cancelar
-        # if boxmonth.ShowModal() == wx.ID_OK:
-        #     month = boxmonth.GetValue()
+        #text box
+        boxYear = wx.TextEntryDialog(None, "Ingrese el año", "WebScraping w/Python", "Ingrese el año")
+        # preguntamos si selecciono aceptar o cancelar
+        if boxYear.ShowModal() == wx.ID_OK:
+            year = boxYear.GetValue()
+        boxmonth = wx.TextEntryDialog(None, "Ingrese el mes", "WebScraping w/Python", "Ingrese el mes")
+        # preguntamos si selecciono aceptar o cancelar
+        if boxmonth.ShowModal() == wx.ID_OK:
+            month = boxmonth.GetValue()
 
     # funciones
     def promedio(self, event):
-        pass
+        wsSet()
     def may(self, event):
         pass
     def men(self, event):
@@ -97,26 +101,25 @@ if ((year == 2018) or (year == 2020)):
     aux1 = aux.replace("ano1", year)
     url = aux1.replace("mes1", month)
 
-# hacemos la peticion a la pagina de el html
-page = requests.get(url)
-# parseamos el html en la variable
-soup = BeautifulSoup(page.text, 'html.parser')
-# separar todos los table en otra variable
-tabla = soup.find('table', align="center", border="1", cellpadding="0", cellspacing="0").tbody
-titles = tabla.find('tr')  # titulos
-valores = tabla.findAll('tr', class_="chico")  # valores
+def wsSet():
+    # hacemos la peticion a la pagina de el html
+    page = requests.get(url)
+    # parseamos el html en la variable
+    soup = BeautifulSoup(page.text, 'html.parser')
+    # separar todos los table en otra variable
+    tabla = soup.find('table', align="center", border="1", cellpadding="0", cellspacing="0").tbody
+    titles = tabla.find('tr')  # titulos
+    valores = tabla.findAll('tr', class_="chico")  # valores
 
-# Datos filtrados y estandarisados
-parsed_titles = []
-parsed_valores = []
-# Limpiado de datos
-[parsed_titles.append(title.text.strip()) for title in titles if title.get_text().strip() != ""]
-for valor in valores:
-    __parsed_valores_row = []
-    __rows = valor.findAll('td')
-    for value in __rows[1:]:
-        __parsed_valores_row.append(value.get_text().strip())
-    parsed_valores.append(__parsed_valores_row)
+
+    # Limpiado de datos
+    [parsed_titles.append(title.text.strip()) for title in titles if title.get_text().strip() != ""]
+    for valor in valores:
+        __parsed_valores_row = []
+        __rows = valor.findAll('td')
+        for value in __rows[1:]:
+            __parsed_valores_row.append(value.get_text().strip())
+        parsed_valores.append(__parsed_valores_row)
 
 # Definiendo los helpers
 def getCompraVentaDelDia(row):
@@ -131,11 +134,11 @@ def getCompraVentaDelDia(row):
 #
 
 def getCompraVentaDelMes(row):
-    #print("\t\tDolares \t\t Reales \t    Peso Argentino \t  Yen \t\t   Euro \t\t\t Libra")
-    #print("\t    Compra\tVenta \t   Compra \t Venta \t   Compra \t Venta \t   Compra \t Venta \tCompra \t Venta \tCompra \t Venta")
+    print("\t\tDolares \t\t Reales \t    Peso Argentino \t  Yen \t\t   Euro \t\t\t Libra")
+    print("\t    Compra\tVenta \t   Compra \t Venta \t   Compra \t Venta \t   Compra \t Venta \tCompra \t Venta \tCompra \t Venta")
     for x in range(0, len(row)):
         generadorDelDia = getCompraVentaDelDia(parsed_valores[x])
-        #print( f"dia {x}", next(generadorDelDia), next(generadorDelDia), next(generadorDelDia), next(generadorDelDia), next(generadorDelDia), next(generadorDelDia))
+        print( f"dia {x}", next(generadorDelDia), next(generadorDelDia), next(generadorDelDia), next(generadorDelDia), next(generadorDelDia), next(generadorDelDia))
 
 
 if __name__ == '__main__':

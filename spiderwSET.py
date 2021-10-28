@@ -1,12 +1,10 @@
 import requests
 from bs4 import BeautifulSoup
 
-import wxPythontuto1
-
 
 # definimos las variables
-#year = input("Ingrese el año de la cotizacion, solo años validos(2010-2011-2012-2013-2014-2017-2019): ")
-#month = input("Ingrese el mes de la cotizacion: ")
+year = input("Ingrese el año de la cotizacion, solo años validos(2010-2011-2012-2013-2014-2017-2019): ")
+month = input("Ingrese el mes de la cotizacion: ")
 
 # url por defecto
 url = 'https://www.set.gov.py/portal/PARAGUAY-SET/detail?folder-id=repository:collaboration:/sites/PARAGUAY-SET/categories/SET/Informes%20Periodicos/cotizaciones-historicos/2010&content-id=/repository/collaboration/sites/PARAGUAY-SET/documents/informes-periodicos/cotizaciones/2010/a-mes-de-enero'
@@ -81,11 +79,11 @@ def getCompraVentaDelDia(row):
 #
 
 def getCompraVentaDelMes(row):
-    #print("\t\tDolares \t\t Reales \t    Peso Argentino \t  Yen \t\t   Euro \t\t\t Libra")
-    #print("\t    Compra\tVenta \t   Compra \t Venta \t   Compra \t Venta \t   Compra \t Venta \tCompra \t Venta \tCompra \t Venta")
+    print("\t\tDolares \t\t Reales \t    Peso Argentino \t  Yen \t\t   Euro \t\t\t Libra")
+    print("\t    Compra\tVenta \t   Compra \t Venta \t   Compra \t Venta \t   Compra \t Venta \tCompra \t Venta \tCompra \t Venta")
     for x in range(0, len(row)):
         generadorDelDia = getCompraVentaDelDia(parsed_valores[x])
-        #print( f"dia {x}", next(generadorDelDia), next(generadorDelDia), next(generadorDelDia), next(generadorDelDia), next(generadorDelDia), next(generadorDelDia))
+        print( f"dia {x}", next(generadorDelDia), next(generadorDelDia), next(generadorDelDia), next(generadorDelDia), next(generadorDelDia), next(generadorDelDia))
 
 
 while True:
